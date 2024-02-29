@@ -1415,6 +1415,101 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwdWJsaWNLZXkiOiIkM
 | validPhone  | Se o telefone é válido ou não   |
 | indicators  | Lista dos indicadores atribuídos ao convite   |
 
+# Atualização de convites em lote
+![Badge](https://img.shields.io/badge/PUT-update--invite-gren)
+
+Você pode atualizar os convites de forma automática para um lote de clientes de uma única vez.
+
+A comunicação será realizada através da seguinte URL:
+```bash
+https://indecx.com/v3/integrations/update-invite
+```
+
+Quando disparado via API, deve-se enviar um JSON via body para a URL mencionada acima e sua autenticação se dará através da company-key fornecida e enviada via HEADER.  Importante que seja enviado o identificador da ação e também que siga um padrão para envio do JSON via body.
+
+## JSON Configuração
+
+**Importante**
+
+E-mail, telefone e nome são campos opcionais. No entanto, pelo menos um desses campos deve ser preenchido. Além disso, o campo inviteId é obrigatório para cada convite.
+
+
+**Essa API possui um limite máximo de 1.000 clientes por requisição.**
+
+```javascript
+POST /v3/integrations/update-invite HTTP/1.1
+Host: indecx.com
+Content-Type: application/json
+Authorization: Bearer $2b$10$BLV4CJAYKSTkktvkJTCVj.dM4H3lHKyiSjoRt3npXGxcNljXXXXX
+{
+   "invites":[
+      {
+         "inviteId": "id_do_convite",
+         "name":"ClienteA",
+         "email":"ClienteA@gmail.com",
+         "phone":""
+      },
+      {
+         "inviteId": "id_do_convite",
+         "name":"ClienteB",
+         "email":"ClienteB@gmail.com",
+         "phone":"5519999999999"
+      },
+      {
+         "inviteId": "id_do_convite",
+         "name":"",
+         "email":"",
+         "phone":""
+      },
+      {
+         "inviteId": "id_do_convite",
+         "name":"",
+         "email":"ClienteD@gmail.com",
+         "phone":"5519999999999"
+      }
+   ]
+}
+
+```
+
+## **Response**
+
+```javascript
+{
+  "message": [
+    {
+      "inviteId": "id_do_convite",
+      "message": "Successfully updated invite."
+    },
+    {
+      "inviteId": "id_do_convite",
+      "message": "Invite not found"
+    },
+    {
+      "inviteId": "id_do_convite",
+      "message": "Failure: All fields are empty."
+    },
+    {
+      "inviteId": "id_do_convite",
+      "message": "Failure: Invalid inviteId."
+    }
+  ]
+}
+````
+
+**Retornos possíveis**
+
+| Código  | Descrição |
+| ------------- | ------------- |
+| 200 | Successfully updated invite.  |
+| 400 | All fields are empty.  |
+| 400 | Invalid inviteId.  |
+| 400 | Invalid phone number.  |
+| 400 | Invalid email.  |
+| 400 | Invalid name.  |
+| 404 | Invite not found  |
+| 500 | Internal Server Error |
+
 ### Obrigado 💚
 
 Sentiu falta de alguma rota que vai facilitar o seu dia a dia?? Entre em contato com o time de CX da Indecx que desenvolvemos para você! = )
